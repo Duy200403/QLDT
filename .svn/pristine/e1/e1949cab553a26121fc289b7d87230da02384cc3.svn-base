@@ -1,0 +1,33 @@
+using Microsoft.EntityFrameworkCore;
+using AppApi.Entities.Models;
+
+namespace AppApi.DataAccess.Base
+{
+    /// <summary>
+    /// DbContext for the Web API service, managing EmailConfig, FileManager, Logs, and LoginHistory.
+    /// </summary>
+    public class WebApiDbContext : ApplicationDbContext
+    {
+        public virtual DbSet<EmailConfig> EmailConfigs { get; set; }
+        public virtual DbSet<FileManager> FileManagers { get; set; }
+        public virtual DbSet<Test> Tests { get; set; }
+        public virtual DbSet<AccountGroupRole> AccountGroupRoles { get; set; }
+        public virtual DbSet<Group> Groups { get; set; }
+
+
+        public WebApiDbContext(DbContextOptions<WebApiDbContext> options)
+            : base(options)
+        {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // concurrent write 
+            modelBuilder.Entity<FileManager>().Property(c => c.Timestamp).IsRowVersion();
+            modelBuilder.Entity<EmailConfig>().Property(c => c.Timestamp).IsRowVersion();
+            modelBuilder.Entity<Test>().Property(c => c.Timestamp).IsRowVersion();
+        }
+    }
+}

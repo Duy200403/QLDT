@@ -1,0 +1,16 @@
+# Build folders
+bin
+obj
+publish
+
+# IDE folders
+.vscode
+.idea
+.vs
+
+# Logs and temp files
+*.log
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
