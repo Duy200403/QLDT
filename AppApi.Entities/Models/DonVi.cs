@@ -28,8 +28,10 @@ namespace AppApi.Entities.Models
         public string? LoaiDonVi { get; set; }               // LoaiDonVi: khoa / phòng / ban...
 
         [Column(TypeName = "NVARCHAR(20)")]
-        public string? TrangThai { get; set; }               // ACTIVE / INACTIVE
-
+        public string? TrangThai { get; set; }        
+        // ACTIVE / INACTIVE
+        [Column(TypeName = "VARCHAR(500)")]
+        public string? Path { get; set; }
         // Cây đơn vị
         public Guid? DonViChaId { get; set; }
         public int? ThuTu { get; set; }

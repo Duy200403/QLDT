@@ -28,7 +28,8 @@ namespace AppApi.Entities.Models.Base
     DateTime? UpdatedDate { get; set; }
     string? UpdatedBy { get; set; }
     bool IsDeleted { get; set; }
-  }
+    DateTime? DeletedAt { get; set; }
+    }
   // code mới
   public interface IAuditEntity<TKey> : IAuditEntity
   {
@@ -59,5 +60,6 @@ namespace AppApi.Entities.Models.Base
     [Column(TypeName = "NVARCHAR(250)")]
     public string? UpdatedBy { get; set; }
     public bool IsDeleted { get; set; } = false;
-  }
+    public DateTime? DeletedAt { get; set; }    
+    }
 }

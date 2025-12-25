@@ -1,4 +1,5 @@
-﻿using AppApi.Entities.Models.Base;
+﻿using AppApi.Entities.Enums;
+using AppApi.Entities.Models.Base;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -34,7 +35,7 @@ namespace AppApi.Entities.Models
 
         public DateTime? NgayKy { get; set; }
 
-        public decimal GiaTriHopDong { get; set; }
+        public decimal? GiaTriHopDong { get; set; }
 
         public DateTime? ThoiGianTu { get; set; }
         public DateTime? ThoiGianDen { get; set; }
@@ -43,7 +44,7 @@ namespace AppApi.Entities.Models
         public string? BaoHanhThongTin { get; set; }
 
         [Column(TypeName = "NVARCHAR(30)")]
-        public string? TrangThai { get; set; }        // DANG_THUC_HIEN / DA_NGHIEM_THU / DA_THANH_LY
+        public TrangThaiHopDong TrangThai { get; set; } = TrangThaiHopDong.MoiTao;
 
         // Navigation
         public virtual ICollection<ThanhToan> ThanhToans { get; set; } = new HashSet<ThanhToan>();

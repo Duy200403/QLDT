@@ -39,9 +39,9 @@ namespace AppApi.Entities.Models
         public virtual DonVi DonViDeXuat { get; set; } = null!;
 
         // Đơn vị mua sắm (FK -> DonVi)
-        public Guid DonViMuaSamId { get; set; }
+        //public Guid DonViMuaSamId { get; set; }
 
-        [ForeignKey(nameof(DonViMuaSamId))]
+        //[ForeignKey(nameof(DonViMuaSamId))]
         public virtual DonVi DonViMuaSam { get; set; } = null!;
 
         [Column(TypeName = "NVARCHAR(100)")]

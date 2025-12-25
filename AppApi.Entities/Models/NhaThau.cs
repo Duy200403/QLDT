@@ -1,4 +1,5 @@
-﻿using AppApi.Entities.Models.Base;
+﻿using AppApi.Entities.Enums;
+using AppApi.Entities.Models.Base;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -36,7 +37,7 @@ namespace AppApi.Entities.Models
         public string? DienThoai { get; set; }
 
         [Column(TypeName = "NVARCHAR(20)")]
-        public string? TrangThai { get; set; }      // đang hoạt động, blacklist,...
+        public TrangThaiNhaThau TrangThai { get; set; } = TrangThaiNhaThau.HoatDong;
         public virtual ICollection<DanhGiaNhaThau> DanhGiaNhaThaus { get; set; } = new HashSet<DanhGiaNhaThau>();
 
         // Navigation 2 chiều sẽ được bổ sung ở các entity sau (HoSoDuThau, ThuMoiBaoGiaCT, ThuMoiThauCT, HopDong, DanhGiaNhaThau)

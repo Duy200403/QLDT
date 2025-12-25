@@ -25,7 +25,7 @@ namespace AppApi.Entities.Models
 
         public DateTime? NgayThanhToan { get; set; }
 
-        public decimal GiaTri { get; set; }
+        public decimal? GiaTri { get; set; }
 
         [Column(TypeName = "NVARCHAR(255)")]
         public string? TaiLieuChungTu { get; set; }

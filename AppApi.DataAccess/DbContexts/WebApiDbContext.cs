@@ -1,5 +1,6 @@
 
 using AppApi.Entities.Models;
+using AppApi.Entities.Models.Base;
 using Microsoft.EntityFrameworkCore;
 
 namespace AppApi.DataAccess.Base
@@ -41,6 +42,7 @@ namespace AppApi.DataAccess.Base
         public virtual DbSet<NghiemThu> NghiemThus { get; set; } = null!;
         public virtual DbSet<DanhGiaNhaThau> DanhGiaNhaThaus { get; set; } = null!;
         public virtual DbSet<TraoDoi> TraoDois { get; set; } = null!;
+        public virtual DbSet<AuditLog> AuditLogs { get; set; }
         public WebApiDbContext(DbContextOptions<WebApiDbContext> options)
             : base(options)
         {
@@ -49,9 +51,20 @@ namespace AppApi.DataAccess.Base
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                if (typeof(IAuditEntity).IsAssignableFrom(entityType.ClrType))
+                {
+                    var parameter = System.Linq.Expressions.Expression.Parameter(entityType.ClrType, "p");
+                    var deletedProperty = System.Linq.Expressions.Expression.Property(parameter, nameof(IAuditEntity.IsDeleted));
+                    var condition = System.Linq.Expressions.Expression.Equal(deletedProperty, System.Linq.Expressions.Expression.Constant(false));
+                    var lambda = System.Linq.Expressions.Expression.Lambda(condition, parameter);
 
-            // concurrent write 
-            modelBuilder.Entity<FileManager>().Property(c => c.Timestamp).IsRowVersion();
+                    modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambda);
+                }
+            }
+                // concurrent write 
+                modelBuilder.Entity<FileManager>().Property(c => c.Timestamp).IsRowVersion();
             modelBuilder.Entity<EmailConfig>().Property(c => c.Timestamp).IsRowVersion();
             modelBuilder.Entity<Test>().Property(c => c.Timestamp).IsRowVersion();
             // ========= QLĐT: cấu hình quan hệ tránh multiple cascade paths =========
@@ -84,8 +97,17 @@ namespace AppApi.DataAccess.Base
             modelBuilder.Entity<HoSoThau>()
                 .HasOne(x => x.DonViMuaSam)
                 .WithMany()
-                .HasForeignKey(x => x.DonViMuaSamId)
                 .OnDelete(DeleteBehavior.NoAction);
+            // CẤU HÌNH MỚI: Định dạng tiền tệ chính xác (18 số, 4 số thập phân)
+            // Áp dụng cho HopDong
+            modelBuilder.Entity<HopDong>()
+                .Property(h => h.GiaTriHopDong)
+                .HasColumnType("decimal(18, 4)");
+
+            // Áp dụng tương tự cho các bảng khác có tiền: DuToanGoiThau, ThanhToan, v.v.
+            modelBuilder.Entity<ThanhToan>()
+                .Property(t => t.GiaTri)
+                .HasColumnType("decimal(18, 4)");
             // Nếu sau này gặp lỗi multiple cascade paths ở chỗ khác
             // thì ta cũng làm tương tự: cấu hình .OnDelete(DeleteBehavior.NoAction)
         }
