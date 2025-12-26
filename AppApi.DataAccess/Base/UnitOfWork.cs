@@ -88,7 +88,6 @@ namespace AppApi.DataAccess.Base
         public IGenericRepository<Role> Role { get; private set; }
         public IGenericRepository<ApiRoleMapping> ApiRoleMapping { get; private set; }
         public IGenericRepository<MenuItem> MenuItem { get; private set; }
-        public IGenericRepository<Test> Test { get; private set; }
         public IGenericRepository<GoiThauKeHoach> GoiThauKeHoach { get; private set; }
         // public IGenericRepository<AccountPatientInfo> AccountPatientInfo { get; private set; }
     }

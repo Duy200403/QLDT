@@ -15,7 +15,6 @@ namespace AppApi.DataAccess.Base
         IGenericRepository<Role> Role { get; }
         IGenericRepository<ApiRoleMapping> ApiRoleMapping { get; }
         IGenericRepository<MenuItem> MenuItem { get; }
-        IGenericRepository<Test> Test { get; }
         // IGenericRepository<AccountPatientInfo> AccountPatientInfo { get; }
         IGenericRepository<GoiThauKeHoach> GoiThauKeHoach { get; }
     }

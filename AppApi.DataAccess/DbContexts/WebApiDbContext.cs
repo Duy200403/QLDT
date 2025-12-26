@@ -12,7 +12,6 @@ namespace AppApi.DataAccess.Base
     {
         public virtual DbSet<EmailConfig> EmailConfigs { get; set; }
         public virtual DbSet<FileManager> FileManagers { get; set; }
-        public virtual DbSet<Test> Tests { get; set; }
         public virtual DbSet<AccountGroupRole> AccountGroupRoles { get; set; }
         public virtual DbSet<Group> Groups { get; set; }
         public virtual DbSet<DonVi> DonVis { get; set; } = null!;
@@ -66,7 +65,6 @@ namespace AppApi.DataAccess.Base
                 // concurrent write 
                 modelBuilder.Entity<FileManager>().Property(c => c.Timestamp).IsRowVersion();
             modelBuilder.Entity<EmailConfig>().Property(c => c.Timestamp).IsRowVersion();
-            modelBuilder.Entity<Test>().Property(c => c.Timestamp).IsRowVersion();
             // ========= QLĐT: cấu hình quan hệ tránh multiple cascade paths =========
 
             // DonViCha - DonViCon: KHÔNG cascade delete
@@ -110,6 +108,17 @@ namespace AppApi.DataAccess.Base
                 .HasColumnType("decimal(18, 4)");
             // Nếu sau này gặp lỗi multiple cascade paths ở chỗ khác
             // thì ta cũng làm tương tự: cấu hình .OnDelete(DeleteBehavior.NoAction)
+            modelBuilder.Entity<VatTu>()
+                .HasOne(v => v.Kho)
+                .WithMany(k => k.VatTus)
+                .HasForeignKey(v => v.KhoId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<VatTu>()
+                .HasOne(v => v.Nganh)
+                .WithMany(n => n.VatTus)
+                .HasForeignKey(v => v.NganhId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

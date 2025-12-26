@@ -12,35 +12,40 @@ namespace AppApi.Entities.Models
     [Table("DeXuatChiTiet")]
     public class DeXuatChiTiet : AuditEntity<Guid>
     {
-        public DeXuatChiTiet()
-        {
-        }
+        public Guid DeXuatMuaSamId { get; set; }
+        [ForeignKey(nameof(DeXuatMuaSamId))]
+        public virtual DeXuatMuaSam DeXuatMuaSam { get; set; } = null!;
 
-        // FK -> DeXuatMuaSam (DeXuatId INT trong SQL)
-        public Guid DeXuatId { get; set; }
+        // === SỬA ĐỔI QUAN TRỌNG: CHO PHÉP NULL ===
+        public Guid? VatTuId { get; set; } // Null = Nhập tay, Có Guid = Chọn từ danh mục
+        [ForeignKey(nameof(VatTuId))]
+        public virtual VatTu? VatTu { get; set; }
 
-        [ForeignKey(nameof(DeXuatId))]
-        public virtual DeXuatMuaSam DeXuat { get; set; } = null!;
+        // === CÁC TRƯỜNG SNAPSHOT (LƯU CỨNG) ===
+        // Nếu chọn danh mục: Tự điền từ bảng VatTu sang
+        // Nếu nhập tay: Người dùng tự gõ vào đây
+        [Required]
+        [Column(TypeName = "NVARCHAR(50)")]
+        public string MaVatTu { get; set; } = null!;
 
         [Required]
-        [Column(TypeName = "NVARCHAR(255)")]
-        public string TenHangHoaDichVu { get; set; } = null!;  // TenHangHoaDichVu
-
-        [Column(TypeName = "NVARCHAR(100)")]
-        public string? MaHang { get; set; }                     // MaHang
-
-        public decimal SoLuong { get; set; }                    // SoLuong
+        [Column(TypeName = "NVARCHAR(500)")]
+        public string TenVatTu { get; set; } = null!;
 
         [Column(TypeName = "NVARCHAR(50)")]
-        public string? DonViTinh { get; set; }                  // DonViTinh
+        public string? DonViTinh { get; set; }
 
-        public decimal DonGiaUocTinh { get; set; }              // DonGiaUocTinh
+        [Column(TypeName = "NVARCHAR(MAX)")]
+        public string? ThongSoKyThuat { get; set; }
 
-        // ThanhTien (SQL dùng cột computed) – ở code có thể tính ở chỗ khác
-        [NotMapped]
-        public decimal ThanhTien => SoLuong * DonGiaUocTinh;
+        // Số liệu đề xuất
+        public decimal SoLuong { get; set; }
 
-        [Column(TypeName = "NVARCHAR(500)")]
-        public string? GhiChu { get; set; }                     // GhiChu
+        // Thêm trường hiển thị Kho/Ngành lúc đề xuất (Optional - để báo cáo)
+        [Column(TypeName = "NVARCHAR(255)")]
+        public string? TenKhoDeXuat { get; set; }
+
+        [Column(TypeName = "NVARCHAR(255)")]
+        public string? TenNganhDeXuat { get; set; }
     }
 }
